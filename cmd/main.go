@@ -2,6 +2,9 @@ package main
 
 import (
 	"context"
+	"credit-layer/internal/application"
+	"credit-layer/internal/infrastructure/postgres"
+	httpHandlder "credit-layer/internal/interfaces/http"
 	"database/sql"
 	"log"
 	"os"
@@ -37,6 +40,24 @@ func main() {
 	}
 
 	log.Println("connected to database")
+
+	appRepo := postgres.NewAppRepository(pool)
+	creditLedgerRepo := postgres.NewCreditLedgerRepository(pool)
+
+	appUseCase := application.NewAppUseCase(appRepo)
+	creditUseCase := application.NewCreditLedgerUseCase(creditLedgerRepo)
+
+	router := httpHandlder.NewRouter(appUseCase, creditUseCase)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Printf("server running on port %s", port)
+	if err := router.Run(":" + port); err != nil {
+		log.Fatalf("server error: %v", err)
+	}
 }
 
 func runMigrations(dbURL string) error {
