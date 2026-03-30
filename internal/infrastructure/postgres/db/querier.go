@@ -12,6 +12,7 @@ type Querier interface {
 	AddCredits(ctx context.Context, arg AddCreditsParams) (CreditLedger, error)
 	CreateApp(ctx context.Context, arg CreateAppParams) (App, error)
 	DeductCredits(ctx context.Context, arg DeductCreditsParams) (CreditLedger, error)
+	ExistsAppByName(ctx context.Context, name string) (bool, error)
 	GetAppByAPIKey(ctx context.Context, apiKey string) (App, error)
 	GetBalance(ctx context.Context, arg GetBalanceParams) (int64, error)
 }

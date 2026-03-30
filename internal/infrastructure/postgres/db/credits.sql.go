@@ -15,7 +15,8 @@ import (
 const addCredits = `-- name: AddCredits :one
 INSERT INTO credit_ledger (app_id, user_id, amount, description, idempotency_key)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT (idempotency_key) DO NOTHING
+ON CONFLICT (idempotency_key) DO UPDATE
+SET idempotency_key = EXCLUDED.idempotency_key
 RETURNING id, app_id, user_id, amount, description, idempotency_key, created_at
 `
 
@@ -74,7 +75,8 @@ func (q *Queries) CreateApp(ctx context.Context, arg CreateAppParams) (App, erro
 const deductCredits = `-- name: DeductCredits :one
 INSERT INTO credit_ledger (app_id, user_id, amount, description, idempotency_key)
 VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT (idempotency_key) DO NOTHING
+ON CONFLICT (idempotency_key) DO UPDATE
+SET idempotency_key = EXCLUDED.idempotency_key
 RETURNING id, app_id, user_id, amount, description, idempotency_key, created_at
 `
 
@@ -105,6 +107,19 @@ func (q *Queries) DeductCredits(ctx context.Context, arg DeductCreditsParams) (C
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const existsAppByName = `-- name: ExistsAppByName :one
+SELECT EXISTS (
+    SELECT 1 FROM apps WHERE name = $1
+)
+`
+
+func (q *Queries) ExistsAppByName(ctx context.Context, name string) (bool, error) {
+	row := q.db.QueryRowContext(ctx, existsAppByName, name)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
 }
 
 const getAppByAPIKey = `-- name: GetAppByAPIKey :one
