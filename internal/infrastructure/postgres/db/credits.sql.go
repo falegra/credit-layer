@@ -7,9 +7,9 @@ package db
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const addCredits = `-- name: AddCredits :one
@@ -21,15 +21,15 @@ RETURNING id, app_id, user_id, amount, description, idempotency_key, created_at
 `
 
 type AddCreditsParams struct {
-	AppID          uuid.UUID      `json:"app_id"`
-	UserID         string         `json:"user_id"`
-	Amount         int64          `json:"amount"`
-	Description    sql.NullString `json:"description"`
-	IdempotencyKey sql.NullString `json:"idempotency_key"`
+	AppID          uuid.UUID   `json:"app_id"`
+	UserID         string      `json:"user_id"`
+	Amount         int64       `json:"amount"`
+	Description    pgtype.Text `json:"description"`
+	IdempotencyKey pgtype.Text `json:"idempotency_key"`
 }
 
 func (q *Queries) AddCredits(ctx context.Context, arg AddCreditsParams) (CreditLedger, error) {
-	row := q.db.QueryRowContext(ctx, addCredits,
+	row := q.db.QueryRow(ctx, addCredits,
 		arg.AppID,
 		arg.UserID,
 		arg.Amount,
@@ -61,7 +61,7 @@ type CreateAppParams struct {
 }
 
 func (q *Queries) CreateApp(ctx context.Context, arg CreateAppParams) (App, error) {
-	row := q.db.QueryRowContext(ctx, createApp, arg.Name, arg.ApiKey)
+	row := q.db.QueryRow(ctx, createApp, arg.Name, arg.ApiKey)
 	var i App
 	err := row.Scan(
 		&i.ID,
@@ -81,15 +81,15 @@ RETURNING id, app_id, user_id, amount, description, idempotency_key, created_at
 `
 
 type DeductCreditsParams struct {
-	AppID          uuid.UUID      `json:"app_id"`
-	UserID         string         `json:"user_id"`
-	Amount         int64          `json:"amount"`
-	Description    sql.NullString `json:"description"`
-	IdempotencyKey sql.NullString `json:"idempotency_key"`
+	AppID          uuid.UUID   `json:"app_id"`
+	UserID         string      `json:"user_id"`
+	Amount         int64       `json:"amount"`
+	Description    pgtype.Text `json:"description"`
+	IdempotencyKey pgtype.Text `json:"idempotency_key"`
 }
 
 func (q *Queries) DeductCredits(ctx context.Context, arg DeductCreditsParams) (CreditLedger, error) {
-	row := q.db.QueryRowContext(ctx, deductCredits,
+	row := q.db.QueryRow(ctx, deductCredits,
 		arg.AppID,
 		arg.UserID,
 		arg.Amount,
@@ -116,7 +116,7 @@ SELECT EXISTS (
 `
 
 func (q *Queries) ExistsAppByName(ctx context.Context, name string) (bool, error) {
-	row := q.db.QueryRowContext(ctx, existsAppByName, name)
+	row := q.db.QueryRow(ctx, existsAppByName, name)
 	var exists bool
 	err := row.Scan(&exists)
 	return exists, err
@@ -128,7 +128,7 @@ WHERE api_key = $1
 `
 
 func (q *Queries) GetAppByAPIKey(ctx context.Context, apiKey string) (App, error) {
-	row := q.db.QueryRowContext(ctx, getAppByAPIKey, apiKey)
+	row := q.db.QueryRow(ctx, getAppByAPIKey, apiKey)
 	var i App
 	err := row.Scan(
 		&i.ID,
@@ -151,7 +151,7 @@ type GetBalanceParams struct {
 }
 
 func (q *Queries) GetBalance(ctx context.Context, arg GetBalanceParams) (int64, error) {
-	row := q.db.QueryRowContext(ctx, getBalance, arg.AppID, arg.UserID)
+	row := q.db.QueryRow(ctx, getBalance, arg.AppID, arg.UserID)
 	var balance int64
 	err := row.Scan(&balance)
 	return balance, err

@@ -5,10 +5,10 @@
 package db
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type App struct {
@@ -19,11 +19,11 @@ type App struct {
 }
 
 type CreditLedger struct {
-	ID             uuid.UUID      `json:"id"`
-	AppID          uuid.UUID      `json:"app_id"`
-	UserID         string         `json:"user_id"`
-	Amount         int64          `json:"amount"`
-	Description    sql.NullString `json:"description"`
-	IdempotencyKey sql.NullString `json:"idempotency_key"`
-	CreatedAt      time.Time      `json:"created_at"`
+	ID             uuid.UUID   `json:"id"`
+	AppID          uuid.UUID   `json:"app_id"`
+	UserID         string      `json:"user_id"`
+	Amount         int64       `json:"amount"`
+	Description    pgtype.Text `json:"description"`
+	IdempotencyKey pgtype.Text `json:"idempotency_key"`
+	CreatedAt      time.Time   `json:"created_at"`
 }
