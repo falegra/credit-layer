@@ -8,13 +8,13 @@
 
 ### What is Credit Layer?
 
-Credit Layer is an open-source service that acts as a **credits layer** for SaaS products with usage-based pricing. Instead of reimplementing the same ledger logic in every project, you self-host this service and call 3 endpoints from your own backend.
+Credit Layer is an open-source service that acts as a **credits layer** for SaaS products. Instead of reimplementing the same ledger logic in every project, you self-host this service and call 3 endpoints from your own backend.
 
 Credit Layer does **not** know anything about payments. You handle your own payment flow (Stripe, Polar, Lemon Squeezy, etc.) and when a payment is confirmed, you call `POST /v1/credit/add`. Credit Layer only manages the ledger.
 
 ### The problem it solves
 
-Every developer building a usage-based SaaS has to reinvent the same infrastructure: tracking credits per user, avoiding duplicates, handling race conditions. Credit Layer gives you that infrastructure out of the box.
+Every developer building a SaaS with a credits system has to reinvent the same infrastructure: tracking credits per user, avoiding duplicates, handling race conditions. Credit Layer gives you that infrastructure out of the box.
 
 ### How it works
 
@@ -268,13 +268,13 @@ db/
 
 ### ¿Qué es Credit Layer?
 
-Credit Layer es un servicio open-source que actúa como **capa de créditos** para productos SaaS con precios por uso. En lugar de reimplementar la misma lógica de ledger en cada proyecto, self-hosteás este servicio y llamás 3 endpoints desde tu propio backend.
+Credit Layer es un servicio open-source que actúa como **capa de créditos** para productos SaaS. En lugar de reimplementar la misma lógica de ledger en cada proyecto, self-hosteás este servicio y llamás 3 endpoints desde tu propio backend.
 
 Credit Layer **no** sabe nada de pagos. Vos manejás tu propio flujo de pagos (Stripe, Polar, Lemon Squeezy, etc.) y cuando se confirma un pago, llamás `POST /v1/credit/add`. Credit Layer solo administra el ledger.
 
 ### El problema que resuelve
 
-Todo desarrollador que construye un SaaS con precios por uso tiene que reinventar la misma infraestructura: llevar créditos por usuario, evitar duplicados, manejar race conditions. Credit Layer te da esa infraestructura lista para usar.
+Todo desarrollador que construye un SaaS con sistema de créditos tiene que reinventar la misma infraestructura: llevar créditos por usuario, evitar duplicados, manejar race conditions. Credit Layer te da esa infraestructura lista para usar.
 
 ### Cómo funciona
 
