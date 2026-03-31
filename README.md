@@ -64,6 +64,8 @@ DATABASE_URL=postgres://user:password@localhost:5432/credit_layer?sslmode=disabl
 TEST_DATABASE_URL=postgres://user:password@localhost:5432/credit_layer_test?sslmode=disable
 ```
 
+> **`sslmode` note:** Use `sslmode=disable` when the app and database are on the same private network. Use `sslmode=require` when connecting to a cloud-hosted database or over the internet.
+
 **4. Run the server**
 
 ```bash
@@ -321,6 +323,8 @@ PORT=8080
 DATABASE_URL=postgres://usuario:password@localhost:5432/credit_layer?sslmode=disable
 TEST_DATABASE_URL=postgres://usuario:password@localhost:5432/credit_layer_test?sslmode=disable
 ```
+
+> **Nota sobre `sslmode`:** Usá `sslmode=disable` cuando la app y la base de datos están en la misma red privada. Usá `sslmode=require` cuando te conectás a una base de datos en la nube o a través de internet.
 
 **4. Correr el servidor**
 
