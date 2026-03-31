@@ -1,0 +1,26 @@
+# Sensitive files — never include in image
+.env
+*.env
+
+# Version control
+.git
+.gitignore
+
+# Documentation
+README.md
+CONTEXT.md
+
+# Test files and mocks
+internal/mocks
+**/*_test.go
+
+# Go tool artifacts
+*.sum
+
+# Editor and OS artifacts
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
